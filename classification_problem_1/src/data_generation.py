@@ -1,9 +1,10 @@
 import matplotlib.pyplot as plt
 import random
 
+import pandas as pd
 
-def generate_data():
-    num_points = 1000000
+
+def generate_random_points(num_points=5000):
     x1 = [random.random()*6 for _ in range(num_points)]
     x2 = [random.random()*2 for _ in range(num_points)]
     points = [(x1[i], x2[i]) for i in range(num_points)]
@@ -24,13 +25,24 @@ def generate_data():
                 groups.append(1)
             else:
                 groups.append(0)
-    plot_points(points, groups)
+    return points, groups
+
+
+def generate_train_test_data():
+    points, groups = generate_random_points(5000)
+    df_train = pd.DataFrame(points, columns=["X1", "X2"])
+    df_train["Y"] = groups
+    df_train.to_csv("c1_train.csv")
+    points, groups = generate_random_points(1000)
+    df_test = pd.DataFrame(points, columns=["X1", "X2"])
+    df_test["Y"] = groups
+    df_test.to_csv("c1_test.csv")
 
 
 
 def plot_points(points, groups):
     COLOR0 = "tab:orange"
-    COLOR1 = "tab:BLUE"
+    COLOR1 = "tab:blue"
     for point, group in zip(points, groups):
         color = COLOR1 if group == 1 else COLOR0
         plt.plot(point[0], point[1], marker=".", markersize=1, color=color)
@@ -44,4 +56,4 @@ def plot_points(points, groups):
     plt.tight_layout()
     plt.show()
 
-generate_data()
+generate_train_test_data()
