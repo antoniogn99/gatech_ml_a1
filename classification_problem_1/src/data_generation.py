@@ -1,13 +1,16 @@
-import matplotlib.pyplot as plt
 import random
 
 import pandas as pd
 
 
-def generate_random_points(num_points=5000):
+def generate_random_points(num_points):
     x1 = [random.random()*6 for _ in range(num_points)]
     x2 = [random.random()*2 for _ in range(num_points)]
     points = [(x1[i], x2[i]) for i in range(num_points)]
+    return points
+
+def generate_data(num_points):
+    points = generate_random_points(num_points)
     groups = []
     for p in points:
         center = (int(p[0])+0.5, 1)
@@ -27,33 +30,19 @@ def generate_random_points(num_points=5000):
                 groups.append(0)
     return points, groups
 
-
-def generate_train_test_data():
-    points, groups = generate_random_points(5000)
+def generate_train_test_data(train_size=5000, test_size=1000, num_erros=100):
+    points, groups = generate_data(train_size)
+    for _ in range(num_erros):
+        i = random.randint(0, train_size-1)
+        groups[i] = 1-groups[i]
     df_train = pd.DataFrame(points, columns=["X1", "X2"])
     df_train["Y"] = groups
-    df_train.to_csv("c1_train.csv")
-    points, groups = generate_random_points(1000)
+    df_train.to_csv("c1_train.csv", index=False)
+    points, groups = generate_data(test_size)
     df_test = pd.DataFrame(points, columns=["X1", "X2"])
     df_test["Y"] = groups
-    df_test.to_csv("c1_test.csv")
+    df_test.to_csv("c1_test.csv", index=False)
 
 
-
-def plot_points(points, groups):
-    COLOR0 = "tab:orange"
-    COLOR1 = "tab:blue"
-    for point, group in zip(points, groups):
-        color = COLOR1 if group == 1 else COLOR0
-        plt.plot(point[0], point[1], marker=".", markersize=1, color=color)
-    plt.xlim([0, 6])
-    plt.ylim([0, 2])
-    plt.xlabel(r"$X_1$")
-    plt.ylabel(r"$X_2$")
-    plt.scatter(-1, -1, marker="o", label="Y=1", color=COLOR1)
-    plt.scatter(-1, -1, marker="o", label="Y=0", color=COLOR0)
-    plt.legend(bbox_to_anchor=(1, 1), loc='lower right')
-    plt.tight_layout()
-    plt.show()
-
-generate_train_test_data()
+if __name__ == "__main__":
+    generate_train_test_data()
