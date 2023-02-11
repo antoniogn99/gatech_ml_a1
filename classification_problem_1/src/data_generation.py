@@ -45,4 +45,9 @@ def generate_train_test_data(train_size=5000, test_size=1000, num_erros=100):
 
 
 if __name__ == "__main__":
-    generate_train_test_data()
+    from analysis import plot_points
+    import matplotlib.pyplot as plt
+    points, groups = generate_data(10**6)
+    plot_points(points, groups)
+    plt.title("Target function")
+    plt.savefig("target_function.png")

@@ -359,5 +359,3 @@ def comparison():
     plt.ylim([0, 1.3])
     plt.legend()
     plt.savefig("comparison.png")
-
-comparison()
