@@ -1,15 +1,20 @@
 import pandas as pd
+import numpy as np
 
 from config import ORIGINAL_DATA_CSV_PATH
-
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import LabelEncoder
 
 
 def prepare_data():
     df = pd.read_csv(ORIGINAL_DATA_CSV_PATH)
     df.columns= df.columns.str.lower()
-    df.drop(columns=['id', "year"], inplace=True)
+    df.drop(columns=["customerid"], inplace=True)
+
+    # Replace space by -1 and convert to float
+    df["totalcharges"] = df["totalcharges"].replace(' ', -1)
+    df["totalcharges"] = df["totalcharges"].astype(float)
+    
+    # Encode binary variables
+    df = df.replace(["Male", "Female", "Yes", "No"], [1, 0, 1, 0])
 
     # Create list with the categorical variables
     cat_vars = []
@@ -28,9 +33,6 @@ def prepare_data():
             right_index=True,
         )
     
-    # Replace NaN by -1
-    df.fillna(df.mean(), inplace=True)
-    df = df[:10000]
     df.to_csv("c2_data.csv", index=False)
 
 
