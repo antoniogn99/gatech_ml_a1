@@ -161,7 +161,7 @@ def plot_comparison():
     plt.bar(x+width/2, scores, width=width, label="Weighted F1 Score")
     for i, v in enumerate(scores):
         plt.text(i, v, "{:.2f}".format(v))
-    plt.bar(x-width/2, times, width=width, label="Time to fit (mins)")
+    plt.bar(x-width/2, times, width=width, label="Time to fit and score (minutes)")
     plt.xticks(x, names)
     plt.ylim([0, 1.3])
     plt.legend()
